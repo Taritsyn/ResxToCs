@@ -11,6 +11,15 @@
 		<SignAssembly>true</SignAssembly>
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
 		<RootNamespace>ResxToCs.DotNet</RootNamespace>
+		<Copyright>Copyright (c) 2017 Andrey Taritsyn - http://www.taritsyn.ru</Copyright>
+		<Authors>Andrey Taritsyn</Authors>
+		<Description>A .NET Core CLI tool that converts the `*.resx` files to the `*.Designer.cs` files.</Description>
+		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
+		<PackageProjectUrl>https://github.com/Taritsyn/ResxToCs</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/Taritsyn/ResxToCs/blob/master/LICENSE.txt</PackageLicenseUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Taritsyn/ResxToCs</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
