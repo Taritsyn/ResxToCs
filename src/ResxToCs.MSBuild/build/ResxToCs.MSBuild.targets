@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<_ResxToCsTaskAssembly Condition=" '$(MSBuildRuntimeType)' == 'Core' ">..\tools\netstandard1.3\ResxToCs.MSBuild.dll</_ResxToCsTaskAssembly>
+		<_ResxToCsTaskAssembly Condition=" '$(MSBuildRuntimeType)' != 'Core' ">..\tools\net40\ResxToCs.MSBuild.dll</_ResxToCsTaskAssembly>
+	</PropertyGroup>
+
+	<UsingTask AssemblyFile="$(_ResxToCsTaskAssembly)" TaskName="ResxToCsTask"/>
+
+	<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
+		<ResxToCsTask ResourceDirectory="" />
+		<PropertyGroup>
+			<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
+		</PropertyGroup>
+	</Target>
+</Project>

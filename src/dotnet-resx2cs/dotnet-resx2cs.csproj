@@ -1,25 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+	<Import Project="..\common.props" />
+
+	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
 		<VersionSuffix>alpha1</VersionSuffix>
 		<TargetFrameworks>netcoreapp1.0;netcoreapp2.0;net40;net45</TargetFrameworks>
 		<RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.0</RuntimeFrameworkVersion>
 		<OutputType>Exe</OutputType>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<AssemblyOriginatorKeyFile>../../build/Key.snk</AssemblyOriginatorKeyFile>
-		<SignAssembly>true</SignAssembly>
-		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
 		<RootNamespace>ResxToCs.DotNet</RootNamespace>
-		<Copyright>Copyright (c) 2017 Andrey Taritsyn - http://www.taritsyn.ru</Copyright>
-		<Authors>Andrey Taritsyn</Authors>
 		<Description>A .NET Core CLI tool that converts the `*.resx` files to the `*.Designer.cs` files.</Description>
+		<PackageReleaseNotes>From the dotnet-resx2cs module was extracted a basic logic and moved to the ResxToCs.Core module.</PackageReleaseNotes>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
-		<PackageProjectUrl>https://github.com/Taritsyn/ResxToCs</PackageProjectUrl>
-		<PackageLicenseUrl>https://github.com/Taritsyn/ResxToCs/blob/master/LICENSE.txt</PackageLicenseUrl>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/Taritsyn/ResxToCs</RepositoryUrl>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -31,12 +23,16 @@
 		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\ResxToCs.Core\ResxToCs.Core.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<!--
-			This file instructs dotnet.exe to use whichever version of .NET Core is installed,
-			which may not be the version this tool is compiled against.
+		This file instructs dotnet.exe to use whichever version of .NET Core is installed,
+		which may not be the version this tool is compiled against.
 		-->
 		<Content Include="prefercliruntime" Pack="true" PackagePath="\prefercliruntime" />
 	</ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ResxToCs
 ========
 
-A .NET Core CLI tool that converts the `*.resx` files to the `*.Designer.cs` files.
+A .NET tools that converts a Resx code into C# code.
 
 ## Installation
 This library can be installed through NuGet - [http://nuget.org/packages/dotnet-resx2cs](http://nuget.org/packages/dotnet-resx2cs).
@@ -13,7 +13,7 @@ The CLI tool must be installed into `.csproj` file:
 	<DotNetCliToolReference Include="dotnet-resx2cs" Version="1.0.0-alpha1" />
 </ItemGroup>
 
-<Target Name="PrecompileScript" BeforeTargets="BeforeBuild" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
+<Target Name="СonvertResxToCs" BeforeTargets="BeforeBuild">
 	<Exec Command="dotnet resx2cs" />
 </Target>
 ```

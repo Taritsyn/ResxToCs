@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("dotnet-resx2cs")]
-[assembly: AssemblyDescription("A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.")]
+[assembly: AssemblyTitle("ResxToCs.Core")]
+[assembly: AssemblyDescription("A .NET library that converts a Resx code into C# code.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]

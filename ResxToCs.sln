@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{38642AA7-1113-4C84-B5EA-0C78157D75F3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-resx2cs", "src\dotnet-resx2cs\dotnet-resx2cs.csproj", "{F7843D70-6A2F-4816-BA98-03FA50E23958}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResxToCs.Core", "src\ResxToCs.Core\ResxToCs.Core.csproj", "{3A40E179-2619-4B1B-B598-ECB3C03DDA84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResxToCs.MSBuild", "src\ResxToCs.MSBuild\ResxToCs.MSBuild.csproj", "{B3516F65-253A-423B-875F-4DAA138FD2BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,22 @@ Global
 		{F7843D70-6A2F-4816-BA98-03FA50E23958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7843D70-6A2F-4816-BA98-03FA50E23958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7843D70-6A2F-4816-BA98-03FA50E23958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A40E179-2619-4B1B-B598-ECB3C03DDA84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A40E179-2619-4B1B-B598-ECB3C03DDA84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A40E179-2619-4B1B-B598-ECB3C03DDA84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A40E179-2619-4B1B-B598-ECB3C03DDA84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3516F65-253A-423B-875F-4DAA138FD2BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3516F65-253A-423B-875F-4DAA138FD2BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3516F65-253A-423B-875F-4DAA138FD2BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3516F65-253A-423B-875F-4DAA138FD2BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F7843D70-6A2F-4816-BA98-03FA50E23958} = {38642AA7-1113-4C84-B5EA-0C78157D75F3}
+		{3A40E179-2619-4B1B-B598-ECB3C03DDA84} = {38642AA7-1113-4C84-B5EA-0C78157D75F3}
+		{B3516F65-253A-423B-875F-4DAA138FD2BC} = {38642AA7-1113-4C84-B5EA-0C78157D75F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66944544-047A-46E2-B405-B0168B4DC9FC}

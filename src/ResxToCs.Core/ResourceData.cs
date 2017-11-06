@@ -1,4 +1,4 @@
-﻿namespace ResxToCs.DotNet
+﻿namespace ResxToCs.Core
 {
 	internal class ResourceData
 	{

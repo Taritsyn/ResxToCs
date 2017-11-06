@@ -1,0 +1,15 @@
+<Project>
+	<PropertyGroup>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<AssemblyOriginatorKeyFile>../../build/Key.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+		<Copyright>Copyright (c) 2017 Andrey Taritsyn - http://www.taritsyn.ru</Copyright>
+		<Authors>Andrey Taritsyn</Authors>
+		<PackageProjectUrl>https://github.com/Taritsyn/ResxToCs</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/Taritsyn/ResxToCs/blob/master/LICENSE.txt</PackageLicenseUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Taritsyn/ResxToCs</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	</PropertyGroup>
+</Project>
