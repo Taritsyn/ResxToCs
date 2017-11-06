@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\common.props" />
+	<Import Project="..\..\build\common.props" />
 
 	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
-		<VersionSuffix>alpha1</VersionSuffix>
+		<VersionSuffix>alpha2</VersionSuffix>
 		<TargetFrameworks>netcoreapp1.0;netcoreapp2.0;net40;net45</TargetFrameworks>
 		<RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.0</RuntimeFrameworkVersion>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ResxToCs.DotNet</RootNamespace>
-		<Description>A .NET Core CLI tool that converts the `*.resx` files to the `*.Designer.cs` files.</Description>
+		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageReleaseNotes>From the dotnet-resx2cs module was extracted a basic logic and moved to the ResxToCs.Core module.</PackageReleaseNotes>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
 

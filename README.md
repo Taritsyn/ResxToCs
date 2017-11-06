@@ -1,20 +1,62 @@
 ResxToCs
 ========
 
-A .NET tools that converts a Resx code into C# code.
+A set of .NET tools that converts a Resx code into C# code.
 
-## Installation
-This library can be installed through NuGet - [http://nuget.org/packages/dotnet-resx2cs](http://nuget.org/packages/dotnet-resx2cs).
+## ResxToCs.Core
+A .NET library that converts a Resx code into C# code.
 
-The CLI tool must be installed into `.csproj` file:
+### Installation
+This library can be installed through NuGet - [http://nuget.org/packages/ResxToCs.Core](http://nuget.org/packages/ResxToCs.Core).
+
+### Usage
+*Coming soon…*
+
+## dotnet-resx2cs
+A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.
+
+### Installation
+This tool can be installed through NuGet - [http://nuget.org/packages/dotnet-resx2cs](http://nuget.org/packages/dotnet-resx2cs). Installation of this package should be done by adding the following code into `.csproj` file:
 
 ```xml
 <ItemGroup>
-	<DotNetCliToolReference Include="dotnet-resx2cs" Version="1.0.0-alpha1" />
+	<DotNetCliToolReference Include="dotnet-resx2cs" Version="…" />
 </ItemGroup>
+```
 
-<Target Name="СonvertResxToCs" BeforeTargets="BeforeBuild">
+### Usage
+In simplest case, you just need to add the following code into `.csproj` file:
+
+```xml
+<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
 	<Exec Command="dotnet resx2cs" />
+	<PropertyGroup>
+		<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
+	</PropertyGroup>
+</Target>
+```
+
+If your `.resx` files are outside the project, then you can specify a another directory by using the following command:
+
+```
+dotnet resx2cs my-resource-directory
+```
+
+## ResxToCs.MSBuild
+A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.
+
+### Installation
+This tool can be installed through NuGet - [http://nuget.org/packages/ResxToCs.MSBuild](http://nuget.org/packages/ResxToCs.MSBuild).
+
+### Usage
+In simplest case, you do not need to do anything. But if your `.resx` files are outside the project, then you need to override the default target and explicitly specify the value of `ResourceDirectory` property.
+
+```xml
+<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
+	<ResxToCsTask ResourceDirectory="my-resource-directory" />
+	<PropertyGroup>
+		<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
+	</PropertyGroup>
 </Target>
 ```
 

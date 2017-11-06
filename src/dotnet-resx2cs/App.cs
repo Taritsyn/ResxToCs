@@ -9,7 +9,7 @@ namespace ResxToCs.DotNet
 	/// <summary>
 	/// Command-line application for converting the <code>.resx</code> files to the <code>.Designer.cs</code> files
 	/// </summary>
-	class Program
+	class App
 	{
 		/// <summary>
 		/// Application configuration settings
@@ -22,7 +22,7 @@ namespace ResxToCs.DotNet
 		/// to the <code>.Designer.cs</code> files
 		/// </summary>
 		/// <param name="args">Command-line arguments</param>
-		private Program(string[] args)
+		private App(string[] args)
 		{
 			_appConfig = GetAppConfigurationFromArguments(args);
 		}
@@ -37,7 +37,7 @@ namespace ResxToCs.DotNet
 
 			try
 			{
-				var app = new Program(args);
+				var app = new App(args);
 				returnCode = app.Run();
 			}
 			catch (Exception e)
@@ -232,7 +232,7 @@ namespace ResxToCs.DotNet
 		/// <returns>Application version number</returns>
 		private static string GetVersion()
 		{
-			string version = typeof(Program)
+			string version = typeof(App)
 #if NET40
 				.Assembly
 #else
