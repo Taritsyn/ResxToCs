@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\build\common.props" />
+	<Import Project="../../build/common.props" />
 
 	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
@@ -9,6 +9,7 @@
 		<RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.0.0</RuntimeFrameworkVersion>
 		<OutputType>Library</OutputType>
 		<Description>A .NET library that converts a Resx code into C# code.</Description>
+		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 		<PackageTags>Designer.cs;Generation;Resx</PackageTags>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

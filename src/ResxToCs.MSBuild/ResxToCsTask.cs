@@ -5,6 +5,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
 using ResxToCs.Core;
+using ResxToCs.Core.Helpers;
 
 namespace ResxToCs.MSBuild
 {
@@ -34,11 +35,11 @@ namespace ResxToCs.MSBuild
 
 			if (!string.IsNullOrWhiteSpace(resourceDirectory))
 			{
+				resourceDirectory = PathHelpers.ProcessSlashes(resourceDirectory.Trim());
 				if (!Path.IsPathRooted(resourceDirectory))
 				{
 					resourceDirectory = Path.Combine(currentDirectory, resourceDirectory);
 				}
-
 				resourceDirectory = Path.GetFullPath(resourceDirectory);
 
 				if (!Directory.Exists(resourceDirectory))

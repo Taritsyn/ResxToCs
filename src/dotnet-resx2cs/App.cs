@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+#if !NET40
 using System.Reflection;
+#endif
 
 using ResxToCs.Core;
+using ResxToCs.Core.Helpers;
 
 namespace ResxToCs.DotNet
 {
@@ -138,16 +141,16 @@ namespace ResxToCs.DotNet
 		private static bool Convert(string resourceDirectory)
 		{
 			bool result = true;
-			string processedResourceDirectory = resourceDirectory;
+			string processedResourceDirectory;
 			string currentDirectory = Directory.GetCurrentDirectory();
 
 			if (!string.IsNullOrWhiteSpace(resourceDirectory))
 			{
-				if (!Path.IsPathRooted(resourceDirectory))
+				processedResourceDirectory = PathHelpers.ProcessSlashes(resourceDirectory.Trim());
+				if (!Path.IsPathRooted(processedResourceDirectory))
 				{
-					processedResourceDirectory = Path.Combine(currentDirectory, resourceDirectory);
+					processedResourceDirectory = Path.Combine(currentDirectory, processedResourceDirectory);
 				}
-
 				processedResourceDirectory = Path.GetFullPath(processedResourceDirectory);
 
 				if (!Directory.Exists(processedResourceDirectory))

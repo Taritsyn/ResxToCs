@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\build\common.props" />
+	<Import Project="../../build/common.props" />
 
 	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
@@ -10,7 +10,7 @@
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ResxToCs.DotNet</RootNamespace>
 		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
-		<PackageReleaseNotes>From the dotnet-resx2cs module was extracted a basic logic and moved to the ResxToCs.Core module.</PackageReleaseNotes>
+		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -26,7 +26,7 @@
 	<ItemGroup>
 		<PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="All" />
 
-		<ProjectReference Include="..\ResxToCs.Core\ResxToCs.Core.csproj" />
+		<ProjectReference Include="../ResxToCs.Core/ResxToCs.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,7 +34,7 @@
 		This file instructs dotnet.exe to use whichever version of .NET Core is installed,
 		which may not be the version this tool is compiled against.
 		-->
-		<Content Include="prefercliruntime" Pack="true" PackagePath="\prefercliruntime" />
+		<Content Include="prefercliruntime" Pack="true" PackagePath="prefercliruntime" />
 	</ItemGroup>
 
 	<Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
