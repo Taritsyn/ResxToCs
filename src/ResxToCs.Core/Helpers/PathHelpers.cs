@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using ResxToCs.Core.Utilities;
+
 namespace ResxToCs.Core.Helpers
 {
 	/// <summary>
@@ -20,7 +22,16 @@ namespace ResxToCs.Core.Helpers
 				return path;
 			}
 
-			string result = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+			char directorySeparatorChar = Path.DirectorySeparatorChar;
+			char altDirectorySeparatorChar = Path.AltDirectorySeparatorChar;
+
+			if (directorySeparatorChar == altDirectorySeparatorChar
+				&& !Utils.IsWindows())
+			{
+				altDirectorySeparatorChar = '\\';
+			}
+
+			string result = path.Replace(altDirectorySeparatorChar, directorySeparatorChar);
 
 			return result;
 		}

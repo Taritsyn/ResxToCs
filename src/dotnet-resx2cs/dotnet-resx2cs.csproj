@@ -12,7 +12,7 @@
 		<PackageType>DotNetCliTool</PackageType>
 		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
-		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixed a error, that occurred during processing paths in Unix-like operating systems.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>

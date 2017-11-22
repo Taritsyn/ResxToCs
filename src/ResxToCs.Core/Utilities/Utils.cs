@@ -1,11 +1,22 @@
 ﻿using System;
 using System.IO;
+#if !NETSTANDARD1_3
+using System.Linq;
+#endif
+#if NETSTANDARD1_3 || NETSTANDARD2_0
+using System.Runtime.InteropServices;
+#endif
 using System.Text;
 
 namespace ResxToCs.Core.Utilities
 {
 	public static class Utils
 	{
+		/// <summary>
+		/// Flag indicating whether the current operating system is Windows
+		/// </summary>
+		private static readonly bool _isWindows;
+
 		/// <summary>
 		/// Array of other whitespace characters
 		/// </summary>
@@ -16,6 +27,42 @@ namespace ResxToCs.Core.Utilities
 		/// </summary>
 		private static readonly char[] _xmlEncodingChars = { '"', '&', '<', '>' };
 
+
+		/// <summary>
+		/// Static constructor
+		/// </summary>
+		static Utils()
+		{
+			_isWindows = InnerIsWindows();
+		}
+
+
+		/// <summary>
+		/// Determines whether the current operating system is Windows
+		/// </summary>
+		/// <returns>true if the operating system is Windows; otherwise, false</returns>
+		public static bool IsWindows()
+		{
+			return _isWindows;
+		}
+
+		private static bool InnerIsWindows()
+		{
+#if NETSTANDARD1_3 || NETSTANDARD2_0
+			bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+#else
+			PlatformID[] windowsPlatformIDs =
+			{
+				PlatformID.Win32NT,
+				PlatformID.Win32S,
+				PlatformID.Win32Windows,
+				PlatformID.WinCE
+			};
+			bool isWindows = windowsPlatformIDs.Contains(Environment.OSVersion.Platform);
+#endif
+
+			return isWindows;
+		}
 
 		/// <summary>
 		/// Collapses a whitespace

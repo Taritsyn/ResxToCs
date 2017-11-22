@@ -10,7 +10,7 @@
 		<OutputType>Library</OutputType>
 		<Description>A .NET library that converts a Resx code into C# code.</Description>
 		<PackageTags>Designer.cs;Generation;Resx</PackageTags>
-		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixed a error, that occurred during processing paths in Unix-like operating systems.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
