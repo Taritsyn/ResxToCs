@@ -10,18 +10,19 @@
 		<OutputType>Library</OutputType>
 		<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
 		<Description>A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.</Description>
-		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 		<PackageTags>Designer.cs;Generation;MSBuild;Resx</PackageTags>
+		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 	</PropertyGroup>
+
+	<Import Project="../../build/nuget-common.props" />
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+		<Reference Include="Microsoft.Build.Framework" Pack="false" />
+		<Reference Include="Microsoft.Build.Utilities.v4.0" Pack="false" />
+	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
 		<PackageReference Include="Microsoft.Build.Framework" Version="15.3.409" PrivateAssets="All" />
@@ -37,13 +38,6 @@
 	<ItemGroup>
 		<Content Include="build/*.targets" PackagePath="build/" />
 	</ItemGroup>
-
-	<Target Name="AddAssemblyReferences" BeforeTargets="BeforeBuild" Condition=" '$(TargetFramework)' == 'net40' ">
-		<ItemGroup>
-			<Reference Include="Microsoft.Build.Framework" />
-			<Reference Include="Microsoft.Build.Utilities.v4.0" />
-		</ItemGroup>
-	</Target>
 
 	<Target Name="AddAdditionalAssembliesToPackage" BeforeTargets="GenerateNuspec">
 		<ItemGroup>

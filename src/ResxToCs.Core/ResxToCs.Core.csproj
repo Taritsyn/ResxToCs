@@ -9,18 +9,14 @@
 		<RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.0.0</RuntimeFrameworkVersion>
 		<OutputType>Library</OutputType>
 		<Description>A .NET library that converts a Resx code into C# code.</Description>
-		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 		<PackageTags>Designer.cs;Generation;Resx</PackageTags>
+		<PackageReleaseNotes>Improved a performance.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 	</PropertyGroup>
+
+	<Import Project="../../build/nuget-common.props" />
 
 	<ItemGroup>
 		<PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="All" />
