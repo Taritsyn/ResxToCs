@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
+using System.Xml;
 
 using ResxToCs.Core.Helpers;
 using ResxToCs.Core.Utilities;
@@ -73,8 +73,10 @@ namespace ResxToCs.Core
 
 			if (!isCultureSpecified)
 			{
-				XDocument xmlDoc = XDocument.Parse(code);
-				output = ConvertXmlDocument(xmlDoc, resourceNamespace, resourceName);
+				using (var xmlReader = XmlReader.Create(new StringReader(code)))
+				{
+					output = ConvertXmlReader(xmlReader, resourceNamespace, resourceName);
+				}
 			}
 
 			return output;
@@ -131,11 +133,12 @@ namespace ResxToCs.Core
 
 			if (!isCultureSpecified)
 			{
-				XDocument xmlDoc;
-
 				try
 				{
-					xmlDoc = XDocument.Load(inputFilePath);
+					using (var xmlReader = XmlReader.Create(inputFilePath))
+					{
+						output = ConvertXmlReader(xmlReader, resourceNamespace, resourceName);
+					}
 				}
 				catch (IOException e)
 				{
@@ -149,12 +152,10 @@ namespace ResxToCs.Core
 				{
 					throw new ResxConversionException("The '{0}' file not found or unreadable.", e);
 				}
-				catch (InvalidOperationException e)
+				catch
 				{
-					throw new ResxConversionException(e.Message, e);
+					throw;
 				}
-
-				output = ConvertXmlDocument(xmlDoc, resourceNamespace, resourceName);
 			}
 
 			var result = new FileConversionResult
@@ -167,23 +168,49 @@ namespace ResxToCs.Core
 			return result;
 		}
 
-		public static string ConvertXmlDocument(XDocument xmlDoc, string resourceNamespace,
+		private static string ConvertXmlReader(XmlReader xmlReader, string resourceNamespace,
 			string resourceName)
 		{
-			var resourceStrings = new List<ResourceData>();
+			var resourceDataList = new List<ResourceData>();
 
-			foreach (XElement xmlElem in xmlDoc.Descendants("data"))
+			try
 			{
-				string name = xmlElem.Attribute("name").Value;
-				string value = xmlElem.Element("value").Value;
-
-				resourceStrings.Add(
-					new ResourceData
+				while (xmlReader.Read())
+				{
+					if (xmlReader.Depth == 1
+						&& xmlReader.NodeType == XmlNodeType.Element
+						&& xmlReader.Name == "data")
 					{
-						Name = name,
-						Value = value
+						var resourceData = new ResourceData();
+						int attrCount = xmlReader.AttributeCount;
+
+						for (int attrIndex = 0; attrIndex < attrCount; attrIndex++)
+						{
+							xmlReader.MoveToAttribute(attrIndex);
+							if (xmlReader.Name == "name")
+							{
+								resourceData.Name = xmlReader.Value;
+								break;
+							}
+						}
+
+						if (xmlReader.ReadToFollowing("value"))
+						{
+							resourceData.Value = xmlReader.ReadElementContentAsString();
+						}
+
+						resourceDataList.Add(resourceData);
 					}
-				);
+				}
+			}
+			catch (XmlException e)
+			{
+				throw new ResxConversionException(
+					string.Format("During parsing the Resx code an error occurred: {0}", e.Message), e);
+			}
+			catch
+			{
+				throw;
 			}
 
 			var outputBuilder = StringBuilderPool.GetBuilder();
@@ -248,7 +275,7 @@ namespace {0}
 		}}
 ", resourceNamespace, resourceName);
 
-			foreach (ResourceData resourceString in resourceStrings)
+			foreach (ResourceData resourceString in resourceDataList)
 			{
 				outputBuilder.AppendLine();
 				RenderProperty(outputBuilder, resourceString);
