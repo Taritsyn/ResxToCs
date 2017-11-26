@@ -11,7 +11,9 @@
 		<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
 		<Description>A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>Designer.cs;Generation;MSBuild;Resx</PackageTags>
-		<PackageReleaseNotes>Fixed a error, that occurred during processing paths in Unix-like operating systems.</PackageReleaseNotes>
+		<PackageReleaseNotes>1. Fixed a error, that occurred during processing paths in Unix-like operating systems;
+2. Added a ability to specify namespace for resources;
+3. The `ResourceDirectory` property of task was renamed to the `InputDirectory` property.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>

@@ -8,7 +8,7 @@
 	<UsingTask AssemblyFile="$(_ResxToCsTaskAssembly)" TaskName="ResxToCsTask"/>
 
 	<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
-		<ResxToCsTask ResourceDirectory="" />
+		<ResxToCsTask InputDirectory="" Namespace="" />
 		<PropertyGroup>
 			<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
 		</PropertyGroup>

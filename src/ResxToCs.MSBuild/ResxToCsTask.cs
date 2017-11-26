@@ -16,7 +16,16 @@ namespace ResxToCs.MSBuild
 		/// <summary>
 		/// The directory containing <code>.resx</code> files
 		/// </summary>
-		public string ResourceDirectory
+		public string InputDirectory
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// The namespace into which the output of the converter is placed
+		/// </summary>
+		public string Namespace
 		{
 			get;
 			set;
@@ -29,7 +38,8 @@ namespace ResxToCs.MSBuild
 		public override bool Execute()
 		{
 			bool result = true;
-			string resourceDirectory = ResourceDirectory;
+			string resourceDirectory = InputDirectory;
+			string resourceNamespace = Namespace;
 			string currentDirectory = Directory.GetCurrentDirectory();
 
 			if (!string.IsNullOrWhiteSpace(resourceDirectory))
@@ -66,7 +76,8 @@ namespace ResxToCs.MSBuild
 
 				try
 				{
-					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath);
+					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath,
+						resourceNamespace);
 					string outputFilePath = conversionResult.OutputPath;
 					string outputDirectoryPath = Path.GetDirectoryName(outputFilePath);
 

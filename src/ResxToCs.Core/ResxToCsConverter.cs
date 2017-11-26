@@ -89,6 +89,17 @@ namespace ResxToCs.Core
 		/// <returns>File conversion result</returns>
 		public static FileConversionResult ConvertFile(string filePath)
 		{
+			return ConvertFile(filePath, string.Empty);
+		}
+
+		/// <summary>
+		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
+		/// </summary>
+		/// <param name="filePath">Path to resource file</param>
+		/// <param name="resourceNamespace">Namespace of resource</param>
+		/// <returns>File conversion result</returns>
+		public static FileConversionResult ConvertFile(string filePath, string resourceNamespace)
+		{
 			if (filePath == null)
 			{
 				throw new ArgumentNullException(nameof(filePath));
@@ -112,19 +123,15 @@ namespace ResxToCs.Core
 			}
 
 			string resourceDirPath = Path.GetDirectoryName(inputFilePath);
-			string projectDirPath;
-
-			try
+			if (string.IsNullOrWhiteSpace(resourceNamespace))
 			{
-				projectDirPath = GetProjectDirectoryName(resourceDirPath);
+				string projectDirPath = GetProjectDirectoryName(resourceDirPath);
+				if (projectDirPath == null)
+				{
+					throw new ResxConversionException("Project file not exist.");
+				}
+				resourceNamespace = GenerateResourceNamespace(projectDirPath, resourceDirPath);
 			}
-			catch (FileNotFoundException e)
-			{
-				throw new ResxConversionException(e.Message, e);
-			}
-
-			string assemblyName = GetAssemblyName(projectDirPath);
-			string resourceNamespace = GenerateResourceNamespace(assemblyName, projectDirPath, resourceDirPath);
 			string resourceName = Path.GetFileNameWithoutExtension(inputFilePath);
 
 			string output = string.Empty;
@@ -306,7 +313,7 @@ namespace {0}
 			{
 				if (string.Equals(projectDirPath, rootPath, StringComparison.OrdinalIgnoreCase))
 				{
-					throw new FileNotFoundException("Project file not exist.");
+					return null;
 				}
 
 				if (Directory.EnumerateFiles(projectDirPath, "*.csproj", SearchOption.TopDirectoryOnly).Any())
@@ -331,9 +338,9 @@ namespace {0}
 			return assemblyName;
 		}
 
-		private static string GenerateResourceNamespace(string assemblyName, string projectDirPath,
-			string resourceDirPath)
+		private static string GenerateResourceNamespace(string projectDirPath, string resourceDirPath)
 		{
+			string assemblyName = GetAssemblyName(projectDirPath);
 			string resourceNamespace = assemblyName;
 
 			if (!string.Equals(projectDirPath, resourceDirPath, StringComparison.OrdinalIgnoreCase))

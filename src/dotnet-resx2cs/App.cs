@@ -70,7 +70,8 @@ namespace ResxToCs.DotNet
 					WriteVersion();
 					break;
 				case AppMode.Conversion:
-					returnCode = Convert(_appConfig.ResourceDirectory) ? 0 : -1;
+					returnCode = Convert(_appConfig.InputDirectory, _appConfig.Namespace)
+						? 0 : -1;
 					break;
 				default:
 					throw new AppUsageException("Unknown application mode.");
@@ -93,36 +94,57 @@ namespace ResxToCs.DotNet
 
 			if (args != null && args.Length > 0)
 			{
-				string firstArgument = args[0];
+				int argCount = args.Length;
+				int lastArgIndex = argCount - 1;
 
-				if (firstArgument.StartsWith("-") && firstArgument.Length > 1)
+				for (int argIndex = 0; argIndex < argCount; argIndex++)
 				{
-					string firstSwitchName = firstArgument.Substring(1).ToUpperInvariant();
+					string arg = args[argIndex];
 
-					switch (firstSwitchName)
+					if (arg.StartsWith("-") && arg.Length > 1)
 					{
-						case "-HELP":
-						case "H":
-						case "?":
-							appConfig.Mode = AppMode.Help;
-							break;
-						case "-VERSION":
-						case "V":
-							appConfig.Mode = AppMode.Version;
-							break;
-						default:
-							throw new AppUsageException(
-								string.Format("Unknown command switch `{0}`.", firstArgument));
+						string switchName = arg.Substring(1).ToUpperInvariant();
+
+						switch (switchName)
+						{
+							case "-HELP":
+							case "H":
+							case "?":
+								appConfig.Mode = AppMode.Help;
+								break;
+							case "-VERSION":
+							case "V":
+								appConfig.Mode = AppMode.Version;
+								break;
+							case "-NAMESPACE":
+							case "N":
+								appConfig.Mode = AppMode.Conversion;
+								if (argIndex < lastArgIndex)
+								{
+									appConfig.Namespace = TrimQuotes(args[++argIndex]);
+								}
+								else
+								{
+									throw new AppUsageException(
+										"`-n` or `--namespace` switch must be followed by resource namespace.");
+								}
+
+								break;
+							default:
+								appConfig.Mode = AppMode.Conversion;
+								appConfig.InputDirectory = TrimQuotes(arg);
+								break;
+						}
 					}
-				}
-				else if (firstArgument == "/?")
-				{
-					appConfig.Mode = AppMode.Help;
-				}
-				else
-				{
-					appConfig.Mode = AppMode.Conversion;
-					appConfig.ResourceDirectory = TrimQuotes(firstArgument);
+					else if (arg == "/?")
+					{
+						appConfig.Mode = AppMode.Help;
+					}
+					else
+					{
+						appConfig.Mode = AppMode.Conversion;
+						appConfig.InputDirectory = TrimQuotes(arg);
+					}
 				}
 			}
 			else
@@ -137,8 +159,9 @@ namespace ResxToCs.DotNet
 		/// Converts a <code>.resx</code> files in specified directory
 		/// </summary>
 		/// <param name="resourceDirectory">The directory containing <code>.resx</code> files</param>
+		/// <param name="resourceNamespace">Namespace of resource</param>
 		/// <returns>Result of conversion (true - success; false - failure)</returns>
-		private static bool Convert(string resourceDirectory)
+		private static bool Convert(string resourceDirectory, string resourceNamespace)
 		{
 			bool result = true;
 			string processedResourceDirectory;
@@ -180,7 +203,8 @@ namespace ResxToCs.DotNet
 
 				try
 				{
-					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath);
+					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath,
+						resourceNamespace);
 					string outputFilePath = conversionResult.OutputPath;
 					string outputDirPath = Path.GetDirectoryName(outputFilePath);
 
@@ -352,13 +376,15 @@ namespace ResxToCs.DotNet
 			TextWriter outputStream = Console.Out;
 
 			outputStream.WriteLine();
-			outputStream.WriteLine("  Usage: dotnet resx2cs [options] <DIRECTORY>");
+			outputStream.WriteLine("Usage: dotnet resx2cs [options] <DIRECTORY>");
 			outputStream.WriteLine();
 			outputStream.WriteLine("Arguments:");
-			outputStream.WriteLine("    <DIRECTORY>\t\t\tThe directory containing `.resx` files. Defaults to the current directory.");
-			outputStream.WriteLine("  Options:");
-			outputStream.WriteLine("    -h, --help\t\t\tShow help information.");
-			outputStream.WriteLine("    -v, --version\t\tShow the version number.");
+			outputStream.WriteLine("  <DIRECTORY>   The directory containing `.resx` files. Defaults to the current directory.");
+			outputStream.WriteLine();
+			outputStream.WriteLine("Options:");
+			outputStream.WriteLine("  -h, --help                    Show help information.");
+			outputStream.WriteLine("  -v, --version                 Show the version number.");
+			outputStream.WriteLine("  -n, --namespace <NAMESPACE>   Namespace into which the output of the converter is placed.");
 		}
 
 		/// <summary>

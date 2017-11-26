@@ -12,7 +12,8 @@
 		<PackageType>DotNetCliTool</PackageType>
 		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
-		<PackageReleaseNotes>Fixed a error, that occurred during processing paths in Unix-like operating systems.</PackageReleaseNotes>
+		<PackageReleaseNotes>1. Fixed a error, that occurred during processing paths in Unix-like operating systems;
+2. Added a ability to specify namespace for resources.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>

@@ -17,7 +17,16 @@
 		/// <summary>
 		/// Gets or sets a directory containing <code>.resx</code> files
 		/// </summary>
-		public string ResourceDirectory
+		public string InputDirectory
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets or sets a namespace into which the output of the converter is placed
+		/// </summary>
+		public string Namespace
 		{
 			get;
 			set;
@@ -30,7 +39,8 @@
 		public AppConfiguration()
 		{
 			Mode = AppMode.Unknown;
-			ResourceDirectory = string.Empty;
+			InputDirectory = string.Empty;
+			Namespace = string.Empty;
 		}
 	}
 }
