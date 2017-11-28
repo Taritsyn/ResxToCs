@@ -23,12 +23,32 @@ namespace ResxToCs.MSBuild
 		}
 
 		/// <summary>
-		/// The namespace into which the output of the converter is placed
+		/// The namespace into which the resource class is placed
 		/// </summary>
 		public string Namespace
 		{
 			get;
 			set;
+		}
+
+		/// <summary>
+		/// Flag for whether to set the access modifier of resource class to internal
+		/// </summary>
+		public bool InternalAccessModifier
+		{
+			get;
+			set;
+		}
+
+
+		/// <summary>
+		/// Constructs an instance of the <see cref="ResxToCsTask"/> class
+		/// </summary>
+		public ResxToCsTask()
+		{
+			InputDirectory = string.Empty;
+			Namespace = string.Empty;
+			InternalAccessModifier = false;
 		}
 
 
@@ -40,6 +60,7 @@ namespace ResxToCs.MSBuild
 			bool result = true;
 			string resourceDirectory = InputDirectory;
 			string resourceNamespace = Namespace;
+			bool internalAccessModifier = InternalAccessModifier;
 			string currentDirectory = Directory.GetCurrentDirectory();
 
 			if (!string.IsNullOrWhiteSpace(resourceDirectory))
@@ -77,7 +98,7 @@ namespace ResxToCs.MSBuild
 				try
 				{
 					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath,
-						resourceNamespace);
+						resourceNamespace, internalAccessModifier);
 					string outputFilePath = conversionResult.OutputPath;
 					string outputDirectoryPath = Path.GetDirectoryName(outputFilePath);
 

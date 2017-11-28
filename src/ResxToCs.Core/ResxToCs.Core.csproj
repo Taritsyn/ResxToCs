@@ -11,7 +11,7 @@
 		<Description>A .NET library that converts a Resx code into C# code.</Description>
 		<PackageTags>Designer.cs;Generation;Resx</PackageTags>
 		<PackageReleaseNotes>1. Fixed a error, that occurred during processing paths in Unix-like operating systems;
-2. Added a ability to specify namespace for resources.</PackageReleaseNotes>
+2. Added a ability to specify the namespace and set the internal access modifier for the resource classes.</PackageReleaseNotes>
 
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>

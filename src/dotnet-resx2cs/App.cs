@@ -70,8 +70,8 @@ namespace ResxToCs.DotNet
 					WriteVersion();
 					break;
 				case AppMode.Conversion:
-					returnCode = Convert(_appConfig.InputDirectory, _appConfig.Namespace)
-						? 0 : -1;
+					returnCode = Convert(_appConfig.InputDirectory, _appConfig.Namespace,
+						_appConfig.InternalAccessModifier) ? 0 : -1;
 					break;
 				default:
 					throw new AppUsageException("Unknown application mode.");
@@ -110,15 +110,15 @@ namespace ResxToCs.DotNet
 							case "-HELP":
 							case "H":
 							case "?":
-								appConfig.Mode = AppMode.Help;
+								SetAppMode(appConfig, AppMode.Help);
 								break;
 							case "-VERSION":
 							case "V":
-								appConfig.Mode = AppMode.Version;
+								SetAppMode(appConfig, AppMode.Version);
 								break;
 							case "-NAMESPACE":
 							case "N":
-								appConfig.Mode = AppMode.Conversion;
+								SetAppMode(appConfig, AppMode.Conversion);
 								if (argIndex < lastArgIndex)
 								{
 									appConfig.Namespace = TrimQuotes(args[++argIndex]);
@@ -130,29 +130,47 @@ namespace ResxToCs.DotNet
 								}
 
 								break;
+							case "-INTERNAL-ACCESS-MODIFIER":
+							case "I":
+								SetAppMode(appConfig, AppMode.Conversion);
+								appConfig.InternalAccessModifier = true;
+								break;
 							default:
-								appConfig.Mode = AppMode.Conversion;
+								SetAppMode(appConfig, AppMode.Conversion);
 								appConfig.InputDirectory = TrimQuotes(arg);
 								break;
 						}
 					}
 					else if (arg == "/?")
 					{
-						appConfig.Mode = AppMode.Help;
+						SetAppMode(appConfig, AppMode.Help);
 					}
 					else
 					{
-						appConfig.Mode = AppMode.Conversion;
+						SetAppMode(appConfig, AppMode.Conversion);
 						appConfig.InputDirectory = TrimQuotes(arg);
 					}
 				}
 			}
 			else
 			{
-				appConfig.Mode = AppMode.Conversion;
+				SetAppMode(appConfig, AppMode.Conversion);
 			}
 
 			return appConfig;
+		}
+
+		/// <summary>
+		/// Sets a application mode to configuration settings
+		/// </summary>
+		/// <param name="appConfig">Application configuration settings</param>
+		/// <param name="mode">Application mode</param>
+		private static void SetAppMode(AppConfiguration appConfig, AppMode mode)
+		{
+			if (appConfig.Mode == AppMode.Unknown)
+			{
+				appConfig.Mode = mode;
+			}
 		}
 
 		/// <summary>
@@ -160,8 +178,11 @@ namespace ResxToCs.DotNet
 		/// </summary>
 		/// <param name="resourceDirectory">The directory containing <code>.resx</code> files</param>
 		/// <param name="resourceNamespace">Namespace of resource</param>
+		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
+		/// resource class to internal</param>
 		/// <returns>Result of conversion (true - success; false - failure)</returns>
-		private static bool Convert(string resourceDirectory, string resourceNamespace)
+		private static bool Convert(string resourceDirectory, string resourceNamespace,
+			bool internalAccessModifier)
 		{
 			bool result = true;
 			string processedResourceDirectory;
@@ -204,7 +225,7 @@ namespace ResxToCs.DotNet
 				try
 				{
 					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath,
-						resourceNamespace);
+						resourceNamespace, internalAccessModifier);
 					string outputFilePath = conversionResult.OutputPath;
 					string outputDirPath = Path.GetDirectoryName(outputFilePath);
 
@@ -379,12 +400,14 @@ namespace ResxToCs.DotNet
 			outputStream.WriteLine("Usage: dotnet resx2cs [options] <DIRECTORY>");
 			outputStream.WriteLine();
 			outputStream.WriteLine("Arguments:");
-			outputStream.WriteLine("  <DIRECTORY>   The directory containing `.resx` files. Defaults to the current directory.");
+			outputStream.WriteLine("  <DIRECTORY>   The directory containing `.resx` files.");
+			outputStream.WriteLine("                Defaults to the current directory.");
 			outputStream.WriteLine();
 			outputStream.WriteLine("Options:");
-			outputStream.WriteLine("  -h, --help                    Show help information.");
-			outputStream.WriteLine("  -v, --version                 Show the version number.");
-			outputStream.WriteLine("  -n, --namespace <NAMESPACE>   Namespace into which the output of the converter is placed.");
+			outputStream.WriteLine("  -h, --help                       Show help information.");
+			outputStream.WriteLine("  -v, --version                    Show the version number.");
+			outputStream.WriteLine("  -n, --namespace <NAMESPACE>      Namespace into which the resource class is placed.");
+			outputStream.WriteLine("  -i, --internal-access-modifier   Set the access modifier of resource class to internal.");
 		}
 
 		/// <summary>

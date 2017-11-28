@@ -24,19 +24,29 @@ namespace ResxToCs.Core
 		/// Converts a Resx code to C# code
 		/// </summary>
 		/// <param name="code">Resx code</param>
-		/// <param name="resourceNamespace">Namespace of resource</param>
 		/// <param name="resourceName">Name of resource</param>
+		/// <param name="resourceNamespace">Namespace of resource</param>
 		/// <returns>C# code</returns>
-		public static string ConvertCode(string code, string resourceNamespace, string resourceName)
+		public static string ConvertCode(string code, string resourceName, string resourceNamespace)
+		{
+			return ConvertCode(code, resourceName, resourceNamespace, false);
+		}
+
+		/// <summary>
+		/// Converts a Resx code to C# code
+		/// </summary>
+		/// <param name="code">Resx code</param>
+		/// <param name="resourceName">Name of resource</param>
+		/// <param name="resourceNamespace">Namespace of resource</param>
+		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
+		/// resource class to internal</param>
+		/// <returns>C# code</returns>
+		public static string ConvertCode(string code, string resourceName, string resourceNamespace,
+			bool internalAccessModifier)
 		{
 			if (code == null)
 			{
 				throw new ArgumentNullException(nameof(code));
-			}
-
-			if (resourceNamespace == null)
-			{
-				throw new ArgumentNullException(nameof(resourceNamespace));
 			}
 
 			if (resourceName == null)
@@ -44,19 +54,16 @@ namespace ResxToCs.Core
 				throw new ArgumentNullException(nameof(resourceName));
 			}
 
+			if (resourceNamespace == null)
+			{
+				throw new ArgumentNullException(nameof(resourceNamespace));
+			}
+
 			if (string.IsNullOrWhiteSpace(code))
 			{
 				throw new ArgumentException(
 					string.Format("The parameter '{0}' must be a non-empty string.", nameof(code)),
 					nameof(code)
-				);
-			}
-
-			if (string.IsNullOrWhiteSpace(resourceNamespace))
-			{
-				throw new ArgumentException(
-					string.Format("The parameter '{0}' must be a non-empty string.", nameof(resourceNamespace)),
-					nameof(resourceNamespace)
 				);
 			}
 
@@ -68,6 +75,14 @@ namespace ResxToCs.Core
 				);
 			}
 
+			if (string.IsNullOrWhiteSpace(resourceNamespace))
+			{
+				throw new ArgumentException(
+					string.Format("The parameter '{0}' must be a non-empty string.", nameof(resourceNamespace)),
+					nameof(resourceNamespace)
+				);
+			}
+
 			string output = string.Empty;
 			bool isCultureSpecified = ResourceNameContainsCulture(resourceName);
 
@@ -75,7 +90,8 @@ namespace ResxToCs.Core
 			{
 				using (var xmlReader = XmlReader.Create(new StringReader(code)))
 				{
-					output = ConvertXmlReader(xmlReader, resourceNamespace, resourceName);
+					output = ConvertXmlReader(xmlReader, resourceName, resourceNamespace,
+						internalAccessModifier);
 				}
 			}
 
@@ -100,6 +116,32 @@ namespace ResxToCs.Core
 		/// <returns>File conversion result</returns>
 		public static FileConversionResult ConvertFile(string filePath, string resourceNamespace)
 		{
+			return ConvertFile(filePath, resourceNamespace, false);
+		}
+
+		/// <summary>
+		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
+		/// </summary>
+		/// <param name="filePath">Path to resource file</param>
+		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
+		/// resource class to internal</param>
+		/// <returns>File conversion result</returns>
+		public static FileConversionResult ConvertFile(string filePath, bool internalAccessModifier)
+		{
+			return ConvertFile(filePath, string.Empty, internalAccessModifier);
+		}
+
+		/// <summary>
+		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
+		/// </summary>
+		/// <param name="filePath">Path to resource file</param>
+		/// <param name="resourceNamespace">Namespace of resource</param>
+		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
+		/// resource class to internal</param>
+		/// <returns>File conversion result</returns>
+		public static FileConversionResult ConvertFile(string filePath, string resourceNamespace,
+			bool internalAccessModifier)
+		{
 			if (filePath == null)
 			{
 				throw new ArgumentNullException(nameof(filePath));
@@ -122,6 +164,7 @@ namespace ResxToCs.Core
 					string.Format("The {0} file is not a resource.", inputFilePath));
 			}
 
+			string resourceName = Path.GetFileNameWithoutExtension(inputFilePath);
 			string resourceDirPath = Path.GetDirectoryName(inputFilePath);
 			if (string.IsNullOrWhiteSpace(resourceNamespace))
 			{
@@ -132,7 +175,6 @@ namespace ResxToCs.Core
 				}
 				resourceNamespace = GenerateResourceNamespace(projectDirPath, resourceDirPath);
 			}
-			string resourceName = Path.GetFileNameWithoutExtension(inputFilePath);
 
 			string output = string.Empty;
 			string outputFilePath = Path.Combine(resourceDirPath, resourceName + ".Designer.cs");
@@ -144,7 +186,8 @@ namespace ResxToCs.Core
 				{
 					using (var xmlReader = XmlReader.Create(inputFilePath))
 					{
-						output = ConvertXmlReader(xmlReader, resourceNamespace, resourceName);
+						output = ConvertXmlReader(xmlReader, resourceName, resourceNamespace,
+							internalAccessModifier);
 					}
 				}
 				catch (IOException e)
@@ -175,9 +218,10 @@ namespace ResxToCs.Core
 			return result;
 		}
 
-		private static string ConvertXmlReader(XmlReader xmlReader, string resourceNamespace,
-			string resourceName)
+		private static string ConvertXmlReader(XmlReader xmlReader, string resourceName,
+			string resourceNamespace, bool internalAccessModifier)
 		{
+			string accessModifier = internalAccessModifier ? "internal" : "public";
 			var resourceDataList = new List<ResourceData>();
 
 			try
@@ -230,7 +274,7 @@ namespace ResxToCs.Core
 //	 the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace {0}
+namespace {1}
 {{
 	using System;
 	using System.Globalization;
@@ -240,15 +284,15 @@ namespace {0}
 	/// <summary>
 	/// A strongly-typed resource class, for looking up localized strings, etc.
 	/// </summary>
-	public class {1}
+	{2} class {0}
 	{{
 		private static Lazy<ResourceManager> _resourceManager =
 			new Lazy<ResourceManager>(() => new ResourceManager(
-				""{0}.{1}"",
+				""{1}.{0}"",
 #if NET40
-				typeof({1}).Assembly
+				typeof({0}).Assembly
 #else
-				typeof({1}).GetTypeInfo().Assembly
+				typeof({0}).GetTypeInfo().Assembly
 #endif
 			));
 
@@ -257,7 +301,7 @@ namespace {0}
 		/// <summary>
 		/// Returns a cached ResourceManager instance used by this class
 		/// </summary>
-		public static ResourceManager ResourceManager
+		{2} static ResourceManager ResourceManager
 		{{
 			get
 			{{
@@ -269,7 +313,7 @@ namespace {0}
 		/// Overrides a current thread's CurrentUICulture property for all
 		/// resource lookups using this strongly typed resource class
 		/// </summary>
-		public static CultureInfo Culture
+		{2} static CultureInfo Culture
 		{{
 			get
 			{{
@@ -280,23 +324,23 @@ namespace {0}
 				_resourceCulture = value;
 			}}
 		}}
-", resourceNamespace, resourceName);
+", resourceName, resourceNamespace, accessModifier);
 
-			foreach (ResourceData resourceString in resourceDataList)
+			foreach (ResourceData resourceData in resourceDataList)
 			{
 				outputBuilder.AppendLine();
-				RenderProperty(outputBuilder, resourceString);
+				RenderProperty(outputBuilder, resourceData, accessModifier);
 			}
 
 			outputBuilder.Append(@"
-			private static string GetString(string name)
-			{
-				string value = ResourceManager.GetString(name, _resourceCulture);
+		private static string GetString(string name)
+		{
+			string value = ResourceManager.GetString(name, _resourceCulture);
 
-				return value;
-			}
+			return value;
 		}
-	}");
+	}
+}");
 
 			string output = outputBuilder.ToString();
 			StringBuilderPool.ReleaseBuilder(outputBuilder);
@@ -360,18 +404,19 @@ namespace {0}
 			return _cultureRegex.IsMatch(resourceName);
 		}
 
-		private static void RenderProperty(StringBuilder builder, ResourceData resourceString)
+		private static void RenderProperty(StringBuilder builder, ResourceData resourceData,
+			string accessModifier)
 		{
 			builder
 				.AppendLine("		/// <summary>")
 				.AppendFormat("		/// Looks up a localized string similar to \"{0}\"",
-					Utils.XmlEncode(Utils.CutShortByWords(resourceString.Value, 100)))
+					Utils.XmlEncode(Utils.CutShortByWords(resourceData.Value, 100)))
 				.AppendLine()
 				.AppendLine("		/// </summary>")
-				.AppendFormat("		public static string {0}", resourceString.Name)
+				.AppendFormat("		{1} static string {0}", resourceData.Name, accessModifier)
 				.AppendLine()
 				.AppendLine("		{")
-				.AppendFormat(@"			get {{ return GetString(""{0}""); }}", resourceString.Name)
+				.AppendFormat(@"			get {{ return GetString(""{0}""); }}", resourceData.Name)
 				.AppendLine()
 				.AppendLine("		}")
 				;
