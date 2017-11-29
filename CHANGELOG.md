@@ -1,6 +1,11 @@
 Change log
 ==========
 
+## v1.0.0 Alpha 4 - November 28, 2017
+ * Fixed a error, that occurred during processing paths in Unix-like operating systems
+ * Added a ability to specify the namespace and set the internal access modifier for the resource classes
+ * In ResxToCs.MSBuild module the `ResourceDirectory` property of task was renamed to the `InputDirectory` property
+
 ## v1.0.0 Alpha 3 - November 21, 2017
  * Improved a performance
 

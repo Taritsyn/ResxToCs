@@ -28,11 +28,8 @@ This tool can be installed through NuGet - [http://nuget.org/packages/dotnet-res
 In simplest case, you just need to add the following code into `.csproj` file:
 
 ```xml
-<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
+<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile">
 	<Exec Command="dotnet resx2cs" />
-	<PropertyGroup>
-		<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
-	</PropertyGroup>
 </Target>
 ```
 
@@ -49,14 +46,21 @@ A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.
 This tool can be installed through NuGet - [http://nuget.org/packages/ResxToCs.MSBuild](http://nuget.org/packages/ResxToCs.MSBuild).
 
 ### Usage
-In simplest case, you do not need to do anything. But if your `.resx` files are outside the project, then you need to override the default target and explicitly specify the value of `ResourceDirectory` property.
+In simplest case, you do not need to do anything. But if your `.resx` files are outside the project, then you need to first disable the default target:
 
 ```xml
-<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile" Condition=" '$(ResxToCsConversionWasRun)' != 'true' ">
-	<ResxToCsTask ResourceDirectory="my-resource-directory" />
-	<PropertyGroup>
-		<ResxToCsConversionWasRun>true</ResxToCsConversionWasRun>
-	</PropertyGroup>
+<PropertyGroup>
+	… 
+	<DisableDefaultResxToCsConversionTarget>true</DisableDefaultResxToCsConversionTarget>
+	… 
+</PropertyGroup>
+```
+
+Then add a new target and explicitly specify the value of `InputDirectory` property:
+
+```xml
+<Target Name="СonvertResxToCs" BeforeTargets="BeforeCompile">
+	<ResxToCsTask InputDirectory="my-resource-directory" />
 </Target>
 ```
 
