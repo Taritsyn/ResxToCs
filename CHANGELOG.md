@@ -1,7 +1,10 @@
 Change log
 ==========
 
-## v1.0.0 Alpha 4 - November 28, 2017
+## v1.0.0 Alpha 5 - November 29, 2017
+ * Fixed a error “Detected package downgrade: NETStandard.Library from 1.6.1 to 1.6.0”
+
+## v1.0.0 Alpha 4 - November 29, 2017
  * Fixed a error, that occurred during processing paths in Unix-like operating systems
  * Added a ability to specify the namespace and set the internal access modifier for the resource classes
  * In ResxToCs.MSBuild module the `ResourceDirectory` property of task was renamed to the `InputDirectory` property
