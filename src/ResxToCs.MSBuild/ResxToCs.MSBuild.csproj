@@ -9,12 +9,12 @@
 		<NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
 		<OutputType>Library</OutputType>
 		<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>Designer.cs;Generation;MSBuild;Resx</PackageTags>
 		<PackageReleaseNotes>Fixed a error “Detected package downgrade: NETStandard.Library from 1.6.1 to 1.6.0”.</PackageReleaseNotes>
-
-		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 	</PropertyGroup>
 
 	<Import Project="../../build/nuget-common.props" />

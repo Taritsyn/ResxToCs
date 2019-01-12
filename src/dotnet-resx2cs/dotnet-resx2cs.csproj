@@ -10,12 +10,12 @@
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ResxToCs.DotNet</RootNamespace>
 		<PackageType>DotNetCliTool</PackageType>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
 		<PackageReleaseNotes>Fixed a error “Detected package downgrade: NETStandard.Library from 1.6.1 to 1.6.0”.</PackageReleaseNotes>
-
-		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 	</PropertyGroup>
 
 	<Import Project="../../build/nuget-common.props" />

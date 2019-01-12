@@ -1,9 +1,22 @@
 <Project>
 	<PropertyGroup>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<Copyright>Copyright © 2017-2019 Andrey Taritsyn</Copyright>
+		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 		<AssemblyOriginatorKeyFile>../../build/Key.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-		<Copyright>Copyright © 2017-2019 Andrey Taritsyn</Copyright>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net40-client' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net45' ">
+		<DefineConstants>$(DefineConstants);NETFULL</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netstandard2.0' ">
+		<DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' Or '$(TargetFramework)' == 'netcoreapp2.0' ">
+		<DefineConstants>$(DefineConstants);NETCOREAPP</DefineConstants>
 	</PropertyGroup>
 </Project>

@@ -3,7 +3,7 @@ using System.IO;
 #if !NETSTANDARD1_3
 using System.Linq;
 #endif
-#if NETSTANDARD1_3 || NETSTANDARD2_0
+#if NETSTANDARD
 using System.Runtime.InteropServices;
 #endif
 using System.Text;
@@ -48,7 +48,7 @@ namespace ResxToCs.Core.Utilities
 
 		private static bool InnerIsWindows()
 		{
-#if NETSTANDARD1_3 || NETSTANDARD2_0
+#if NETSTANDARD
 			bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 #else
 			PlatformID[] windowsPlatformIDs =
