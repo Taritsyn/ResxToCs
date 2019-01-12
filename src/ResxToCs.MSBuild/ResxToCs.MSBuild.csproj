@@ -44,7 +44,7 @@
 			<_PackageFiles Include="bin/$(Configuration)/*/ResxToCs.Core.dll">
 				<PackagePath>tools/%(RecursiveDir)</PackagePath>
 				<Visible>false</Visible>
-				<BuildAction>Content</BuildAction>
+				<BuildAction>None</BuildAction>
 			</_PackageFiles>
 		</ItemGroup>
 	</Target>

@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<Authors>Andrey Taritsyn</Authors>
-		<PackageLicenseUrl>https://github.com/Taritsyn/ResxToCs/blob/master/LICENSE.txt</PackageLicenseUrl>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageProjectUrl>https://github.com/Taritsyn/ResxToCs</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Taritsyn/ResxToCs</RepositoryUrl>
@@ -10,4 +10,12 @@
 		<PackageOutputPath>../../nuget</PackageOutputPath>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="../../LICENSE.txt">
+			<PackagePath>$(PackageLicenseFile)</PackagePath>
+			<Pack>true</Pack>
+			<Visible>false</Visible>
+		</Content>
+	</ItemGroup>
 </Project>

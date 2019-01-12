@@ -4,6 +4,6 @@
 		<AssemblyOriginatorKeyFile>../../build/Key.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-		<Copyright>Copyright © 2017 Andrey Taritsyn</Copyright>
+		<Copyright>Copyright © 2017-2019 Andrey Taritsyn</Copyright>
 	</PropertyGroup>
 </Project>
