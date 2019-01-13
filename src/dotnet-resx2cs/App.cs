@@ -3,7 +3,6 @@ using System.IO;
 #if !NET40
 using System.Reflection;
 #endif
-using System.Threading;
 
 using ResxToCs.Core;
 using ResxToCs.Core.Helpers;
@@ -217,7 +216,7 @@ namespace ResxToCs.DotNet
 
 			int processedFileCount = 0;
 			int сonvertedFileCount = 0;
-			int unconvertedFileCount = 0;
+			int failedFileCount = 0;
 
 			foreach (string filePath in Directory.EnumerateFiles(processedResourceDirectory, "*.resx", SearchOption.AllDirectories))
 			{
@@ -228,28 +227,32 @@ namespace ResxToCs.DotNet
 					FileConversionResult conversionResult = ResxToCsConverter.ConvertFile(filePath,
 						resourceNamespace, internalAccessModifier);
 					string outputFilePath = conversionResult.OutputPath;
-					string outputDirPath = Path.GetDirectoryName(outputFilePath);
+					string convertedContent = conversionResult.ConvertedContent;
+					bool changesDetected = FileHelpers.HasFileContentChanged(outputFilePath, convertedContent);
 
-					if (!Directory.Exists(outputDirPath))
+					if (changesDetected)
 					{
-						Directory.CreateDirectory(outputDirPath);
-					}
+						string outputDirPath = Path.GetDirectoryName(outputFilePath);
+						if (!Directory.Exists(outputDirPath))
+						{
+							Directory.CreateDirectory(outputDirPath);
+						}
 
-					using (var fileWriteWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, outputFilePath))
+						File.WriteAllText(outputFilePath, convertedContent);
+
+						WriteInfoLine("	* '{0}' file has been successfully converted", relativeFilePath);
+						сonvertedFileCount++;
+					}
+					else
 					{
-						fileWriteWaitHandle.WaitOne();
-						File.WriteAllText(outputFilePath, conversionResult.ConvertedContent);
-						fileWriteWaitHandle.Set();
+						WriteInfoLine("	* '{0}' file has not changed", relativeFilePath);
 					}
-
-					WriteInfoLine("	* '{0}' file has been successfully converted", relativeFilePath);
-					сonvertedFileCount++;
 				}
 				catch (ResxConversionException e)
 				{
 					WriteInfoLine("	* '{0}' file failed to convert");
 					WriteErrorLine(e.Message);
-					unconvertedFileCount++;
+					failedFileCount++;
 				}
 
 				processedFileCount++;
@@ -259,8 +262,9 @@ namespace ResxToCs.DotNet
 			{
 				WriteInfoLine();
 				WriteInfoLine("Total files: {0}. Converted: {1}. Failed: {2}.",
-					processedFileCount, сonvertedFileCount, unconvertedFileCount);
-				result = processedFileCount == сonvertedFileCount;
+					processedFileCount, сonvertedFileCount, failedFileCount);
+
+				result = failedFileCount == 0;
 				if (result)
 				{
 					WriteSuccessLine("Conversion is successfull.");
