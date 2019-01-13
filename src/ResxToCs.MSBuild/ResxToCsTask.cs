@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -107,7 +108,12 @@ namespace ResxToCs.MSBuild
 						Directory.CreateDirectory(outputDirectoryPath);
 					}
 
-					File.WriteAllText(outputFilePath, conversionResult.ConvertedContent);
+					using (var fileWriteWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, outputFilePath))
+					{
+						fileWriteWaitHandle.WaitOne();
+						File.WriteAllText(outputFilePath, conversionResult.ConvertedContent);
+						fileWriteWaitHandle.Set();
+					}
 
 					WriteInfoLine("	* '{0}' file has been successfully converted", relativeFilePath);
 					сonvertedFileCount++;

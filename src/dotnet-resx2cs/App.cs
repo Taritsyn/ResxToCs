@@ -3,6 +3,7 @@ using System.IO;
 #if !NET40
 using System.Reflection;
 #endif
+using System.Threading;
 
 using ResxToCs.Core;
 using ResxToCs.Core.Helpers;
@@ -234,7 +235,12 @@ namespace ResxToCs.DotNet
 						Directory.CreateDirectory(outputDirPath);
 					}
 
-					File.WriteAllText(outputFilePath, conversionResult.ConvertedContent);
+					using (var fileWriteWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, outputFilePath))
+					{
+						fileWriteWaitHandle.WaitOne();
+						File.WriteAllText(outputFilePath, conversionResult.ConvertedContent);
+						fileWriteWaitHandle.Set();
+					}
 
 					WriteInfoLine("	* '{0}' file has been successfully converted", relativeFilePath);
 					сonvertedFileCount++;
