@@ -1,6 +1,9 @@
 Change log
 ==========
 
+## v1.0.0 Alpha 6 - January 13, 2019
+ * An attempt was made to prevent simultaneous writing to the output file
+
 ## v1.0.0 Alpha 5 - November 29, 2017
  * Fixed a error “Detected package downgrade: NETStandard.Library from 1.6.1 to 1.6.0”
 
