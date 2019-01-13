@@ -5,7 +5,7 @@
 	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
 		<VersionSuffix>alpha5</VersionSuffix>
-		<TargetFrameworks>net40;netstandard1.3;netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net40;netstandard1.3</TargetFrameworks>
 		<NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
 		<OutputType>Library</OutputType>
 		<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
@@ -14,8 +14,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>A MSBuild task that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>Designer.cs;Generation;MSBuild;Resx</PackageTags>
-		<PackageReleaseNotes>1. An attempt was made to prevent simultaneous writing to the output file;
-2. Added support of .NET Standard 2.0.</PackageReleaseNotes>
+		<PackageReleaseNotes>An attempt was made to prevent simultaneous writing to the output file.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<Import Project="../../build/nuget-common.props" />
@@ -25,7 +24,7 @@
 		<Reference Include="Microsoft.Build.Utilities.v4.0" Pack="false" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netstandard2.0' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
 		<PackageReference Include="Microsoft.Build.Framework" Version="15.1.548" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.1.548" PrivateAssets="All" />
 	</ItemGroup>
