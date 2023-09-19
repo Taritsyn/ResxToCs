@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<Copyright>Copyright © 2017-2019 Andrey Taritsyn</Copyright>
+		<Copyright>Copyright © 2017-2023 Andrey Taritsyn</Copyright>
 		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
 		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 		<AssemblyOriginatorKeyFile>../../build/Key.snk</AssemblyOriginatorKeyFile>

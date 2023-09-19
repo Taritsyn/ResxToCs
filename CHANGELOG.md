@@ -1,6 +1,11 @@
 Change log
 ==========
 
+## v1.0.0 Alpha 7 - September 19, 2023
+ * In ResxToCs.Core module added a ability to specify the output file
+ * In dotnet-resx2cs module added a command line switch to specify the output directory
+ * In ResxToCs.MSBuild module added a task property to specify the output directory
+
 ## v1.0.0 Alpha 6 - January 13, 2019
  * An attempt was made to prevent simultaneous writing to the output file
 
