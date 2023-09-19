@@ -13,6 +13,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>A .NET library that converts a Resx code into C# code.</Description>
 		<PackageTags>Designer.cs;Generation;Resx</PackageTags>
+		<PackageReleaseNotes>Added a ability to specify the output file.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<Import Project="../../build/nuget-common.props" />

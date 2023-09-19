@@ -21,7 +21,7 @@
 		Version,
 
 		/// <summary>
-		/// Convert <code>.resx</code> file
+		/// Convert <с>.resx</с> file
 		/// </summary>
 		Conversion
 	}

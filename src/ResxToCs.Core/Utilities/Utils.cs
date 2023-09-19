@@ -10,7 +10,7 @@ using System.Text;
 
 namespace ResxToCs.Core.Utilities
 {
-	public static class Utils
+	internal static class Utils
 	{
 		/// <summary>
 		/// Flag indicating whether the current operating system is Windows

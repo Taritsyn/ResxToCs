@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
+using ResxToCs.Core.Constants;
 using ResxToCs.Core.Helpers;
 using ResxToCs.Core.Utilities;
 
@@ -26,23 +27,11 @@ namespace ResxToCs.Core
 		/// <param name="code">Resx code</param>
 		/// <param name="resourceName">Name of resource</param>
 		/// <param name="resourceNamespace">Namespace of resource</param>
-		/// <returns>C# code</returns>
-		public static string ConvertCode(string code, string resourceName, string resourceNamespace)
-		{
-			return ConvertCode(code, resourceName, resourceNamespace, false);
-		}
-
-		/// <summary>
-		/// Converts a Resx code to C# code
-		/// </summary>
-		/// <param name="code">Resx code</param>
-		/// <param name="resourceName">Name of resource</param>
-		/// <param name="resourceNamespace">Namespace of resource</param>
 		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
 		/// resource class to internal</param>
 		/// <returns>C# code</returns>
 		public static string ConvertCode(string code, string resourceName, string resourceNamespace,
-			bool internalAccessModifier)
+			bool internalAccessModifier = false)
 		{
 			if (code == null)
 			{
@@ -62,7 +51,7 @@ namespace ResxToCs.Core
 			if (string.IsNullOrWhiteSpace(code))
 			{
 				throw new ArgumentException(
-					string.Format("The parameter '{0}' must be a non-empty string.", nameof(code)),
+					string.Format(ErrorMessages.ArgumentIsEmpty, nameof(code)),
 					nameof(code)
 				);
 			}
@@ -70,7 +59,7 @@ namespace ResxToCs.Core
 			if (string.IsNullOrWhiteSpace(resourceName))
 			{
 				throw new ArgumentException(
-					string.Format("The parameter '{0}' must be a non-empty string.", nameof(resourceName)),
+					string.Format(ErrorMessages.ArgumentIsEmpty, nameof(resourceName)),
 					nameof(resourceName)
 				);
 			}
@@ -78,7 +67,7 @@ namespace ResxToCs.Core
 			if (string.IsNullOrWhiteSpace(resourceNamespace))
 			{
 				throw new ArgumentException(
-					string.Format("The parameter '{0}' must be a non-empty string.", nameof(resourceNamespace)),
+					string.Format(ErrorMessages.ArgumentIsEmpty, nameof(resourceNamespace)),
 					nameof(resourceNamespace)
 				);
 			}
@@ -99,92 +88,79 @@ namespace ResxToCs.Core
 		}
 
 		/// <summary>
-		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
+		/// Converts a <c>.resx</c> file to <c>.Designer.cs</c> file
 		/// </summary>
-		/// <param name="filePath">Path to resource file</param>
-		/// <returns>File conversion result</returns>
-		public static FileConversionResult ConvertFile(string filePath)
-		{
-			return ConvertFile(filePath, string.Empty);
-		}
-
-		/// <summary>
-		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
-		/// </summary>
-		/// <param name="filePath">Path to resource file</param>
-		/// <param name="resourceNamespace">Namespace of resource</param>
-		/// <returns>File conversion result</returns>
-		public static FileConversionResult ConvertFile(string filePath, string resourceNamespace)
-		{
-			return ConvertFile(filePath, resourceNamespace, false);
-		}
-
-		/// <summary>
-		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
-		/// </summary>
-		/// <param name="filePath">Path to resource file</param>
-		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
-		/// resource class to internal</param>
-		/// <returns>File conversion result</returns>
-		public static FileConversionResult ConvertFile(string filePath, bool internalAccessModifier)
-		{
-			return ConvertFile(filePath, string.Empty, internalAccessModifier);
-		}
-
-		/// <summary>
-		/// Converts a <code>.resx</code> file to <code>.Designer.cs</code> file
-		/// </summary>
-		/// <param name="filePath">Path to resource file</param>
+		/// <param name="inputFile">Path to input resource file</param>
+		/// <param name="outputFile">Path to output C#-file</param>
 		/// <param name="resourceNamespace">Namespace of resource</param>
 		/// <param name="internalAccessModifier">Flag for whether to set the access modifier of
 		/// resource class to internal</param>
 		/// <returns>File conversion result</returns>
-		public static FileConversionResult ConvertFile(string filePath, string resourceNamespace,
-			bool internalAccessModifier)
+		public static FileConversionResult ConvertFile(string inputFile, string outputFile = null,
+			string resourceNamespace = null, bool internalAccessModifier = false)
 		{
-			if (filePath == null)
+			if (inputFile == null)
 			{
-				throw new ArgumentNullException(nameof(filePath));
+				throw new ArgumentNullException(nameof(inputFile));
 			}
 
-			if (string.IsNullOrWhiteSpace(filePath))
+			if (string.IsNullOrWhiteSpace(inputFile))
 			{
 				throw new ArgumentException(
-					string.Format("The parameter '{0}' must be a non-empty string.", nameof(filePath)),
-					nameof(filePath)
+					string.Format(ErrorMessages.ArgumentIsEmpty, nameof(inputFile)),
+					nameof(inputFile)
 				);
 			}
 
-			string inputFilePath = PathHelpers.GetCanonicalPath(filePath);
-			string inputFileExtension = Path.GetExtension(inputFilePath);
+			string inputFileExtension = Path.GetExtension(inputFile);
 
-			if (!string.Equals(inputFileExtension, ".resx", StringComparison.OrdinalIgnoreCase))
+			if (!string.Equals(inputFileExtension, FileExtension.Resx, StringComparison.OrdinalIgnoreCase))
 			{
 				throw new ResxConversionException(
-					string.Format("The {0} file is not a resource.", inputFilePath));
+					string.Format("The {0} file is not a resource.", inputFile));
 			}
 
-			string resourceName = Path.GetFileNameWithoutExtension(inputFilePath);
-			string resourceDirPath = Path.GetDirectoryName(inputFilePath);
+			string processedInputFile = PathHelpers.GetCanonicalPath(inputFile);
+			string processedOutputFile;
+
+			if (!string.IsNullOrWhiteSpace(outputFile))
+			{
+				string outputFileExtension = Path.GetExtension(outputFile);
+
+				if (!string.Equals(outputFileExtension, ".cs", StringComparison.OrdinalIgnoreCase))
+				{
+					throw new ResxConversionException(
+						string.Format("The {0} file is not a C#-file.", outputFile));
+				}
+
+				processedOutputFile = PathHelpers.GetCanonicalPath(outputFile);
+			}
+			else
+			{
+				processedOutputFile = ConvertFilePath(processedInputFile);
+			}
+
+			string outputDir = Path.GetDirectoryName(processedOutputFile);
+
 			if (string.IsNullOrWhiteSpace(resourceNamespace))
 			{
-				string projectDirPath = GetProjectDirectoryName(resourceDirPath);
-				if (projectDirPath == null)
+				string projectDir = GetProjectDirectoryName(outputDir);
+				if (projectDir == null)
 				{
 					throw new ResxConversionException("Project file not exist.");
 				}
-				resourceNamespace = GenerateResourceNamespace(projectDirPath, resourceDirPath);
+				resourceNamespace = GenerateResourceNamespace(projectDir, outputDir);
 			}
 
 			string output = string.Empty;
-			string outputFilePath = Path.Combine(resourceDirPath, resourceName + ".Designer.cs");
+			string resourceName = GenerateResourceName(processedOutputFile);
 			bool isCultureSpecified = ResourceNameContainsCulture(resourceName);
 
 			if (!isCultureSpecified)
 			{
 				try
 				{
-					using (var xmlReader = XmlReader.Create(inputFilePath))
+					using (var xmlReader = XmlReader.Create(inputFile))
 					{
 						output = ConvertXmlReader(xmlReader, resourceName, resourceNamespace,
 							internalAccessModifier);
@@ -192,15 +168,15 @@ namespace ResxToCs.Core
 				}
 				catch (IOException e)
 				{
-					throw new ResxConversionException("The '{0}' file not found or unreadable.", e);
+					throw new ResxConversionException(ErrorMessages.FileNotFoundOrUnreadable, e);
 				}
 				catch (UnauthorizedAccessException e)
 				{
-					throw new ResxConversionException("The '{0}' file not found or unreadable.", e);
+					throw new ResxConversionException(ErrorMessages.FileNotFoundOrUnreadable, e);
 				}
 				catch (SecurityException e)
 				{
-					throw new ResxConversionException("The '{0}' file not found or unreadable.", e);
+					throw new ResxConversionException(ErrorMessages.FileNotFoundOrUnreadable, e);
 				}
 				catch
 				{
@@ -211,11 +187,47 @@ namespace ResxToCs.Core
 			var result = new FileConversionResult
 			{
 				ConvertedContent = output,
-				InputPath = inputFilePath,
-				OutputPath = outputFilePath
+				InputPath = processedInputFile,
+				OutputPath = processedOutputFile
 			};
 
 			return result;
+		}
+
+		/// <summary>
+		/// Converts a <c>.resx</c> file path to <c>.Designer.cs</c> file path
+		/// </summary>
+		/// <param name="inputFile">Path to input resource file</param>
+		/// <param name="outputDir">Directory containing output <с>.Designer.cs</с> files</param>
+		/// <returns>Path to output C#-file</returns>
+		internal static string ConvertFilePath(string inputFile, string outputDir = null)
+		{
+			if (inputFile == null)
+			{
+				throw new ArgumentNullException(nameof(inputFile));
+			}
+
+			if (string.IsNullOrWhiteSpace(inputFile))
+			{
+				throw new ArgumentException(
+					string.Format(ErrorMessages.ArgumentIsEmpty, nameof(inputFile)),
+					nameof(inputFile)
+				);
+			}
+
+			string outputFile;
+
+			if (!string.IsNullOrWhiteSpace(outputDir))
+			{
+				string inputFileName = Path.GetFileName(inputFile);
+				outputFile = Path.Combine(outputDir, Path.ChangeExtension(inputFileName, FileExtension.DesignerCs));
+			}
+			else
+			{
+				outputFile = Path.ChangeExtension(inputFile, FileExtension.DesignerCs);
+			}
+
+			return outputFile;
 		}
 
 		private static string ConvertXmlReader(XmlReader xmlReader, string resourceName,
@@ -289,7 +301,7 @@ namespace {1}
 		private static Lazy<ResourceManager> _resourceManager =
 			new Lazy<ResourceManager>(() => new ResourceManager(
 				""{1}.{0}"",
-#if NET40
+#if NET20 || NET30 || NET35 || NET40
 				typeof({0}).Assembly
 #else
 				typeof({0}).GetTypeInfo().Assembly
@@ -348,48 +360,54 @@ namespace {1}
 			return output;
 		}
 
-		private static string GetProjectDirectoryName(string resourceDirPath)
+		private static string GetProjectDirectoryName(string resourceDir)
 		{
-			string rootPath = PathHelpers.RemoveLastSlash(Path.GetPathRoot(resourceDirPath));
-			string projectDirPath = PathHelpers.RemoveLastSlash(resourceDirPath);
+			string rootDir = PathHelpers.RemoveLastSlash(Path.GetPathRoot(resourceDir));
+			string projectDir = PathHelpers.RemoveLastSlash(resourceDir);
 
-			while (true)
+			while (!Directory.Exists(projectDir))
 			{
-				if (string.Equals(projectDirPath, rootPath, StringComparison.OrdinalIgnoreCase))
+				if (string.Equals(projectDir, rootDir, StringComparison.OrdinalIgnoreCase))
 				{
 					return null;
 				}
 
-				if (Directory.EnumerateFiles(projectDirPath, "*.csproj", SearchOption.TopDirectoryOnly).Any())
+				projectDir = PathHelpers.RemoveLastSlash(PathHelpers.GetParentDirectoryName(projectDir));
+			}
+
+			while (true)
+			{
+				if (string.Equals(projectDir, rootDir, StringComparison.OrdinalIgnoreCase))
+				{
+					return null;
+				}
+
+				if (Directory.EnumerateFiles(projectDir, "*.csproj", SearchOption.TopDirectoryOnly).Any())
 				{
 					break;
 				}
 
-				int lastSlashIndex = projectDirPath.LastIndexOf(Path.DirectorySeparatorChar);
-				if (lastSlashIndex != -1)
-				{
-					projectDirPath = projectDirPath.Substring(0, lastSlashIndex);
-				}
+				projectDir = PathHelpers.RemoveLastSlash(PathHelpers.GetParentDirectoryName(projectDir));
 			}
 
-			return projectDirPath;
+			return projectDir;
 		}
 
-		private static string GetAssemblyName(string projectDirPath)
+		private static string GetAssemblyName(string projectDir)
 		{
-			string assemblyName = Path.GetFileName(PathHelpers.RemoveLastSlash(projectDirPath));
+			string assemblyName = Path.GetFileName(PathHelpers.RemoveLastSlash(projectDir));
 
 			return assemblyName;
 		}
 
-		private static string GenerateResourceNamespace(string projectDirPath, string resourceDirPath)
+		private static string GenerateResourceNamespace(string projectDir, string resourceDir)
 		{
-			string assemblyName = GetAssemblyName(projectDirPath);
+			string assemblyName = GetAssemblyName(projectDir);
 			string resourceNamespace = assemblyName;
 
-			if (!string.Equals(projectDirPath, resourceDirPath, StringComparison.OrdinalIgnoreCase))
+			if (!string.Equals(projectDir, resourceDir, StringComparison.OrdinalIgnoreCase))
 			{
-				string resourceNamespacePart = resourceDirPath.Substring(projectDirPath.Length);
+				string resourceNamespacePart = resourceDir.Substring(projectDir.Length);
 				resourceNamespacePart = resourceNamespacePart.Trim(Path.DirectorySeparatorChar);
 				resourceNamespacePart = resourceNamespacePart.Replace(Path.DirectorySeparatorChar, '.');
 
@@ -397,6 +415,23 @@ namespace {1}
 			}
 
 			return resourceNamespace;
+		}
+
+		private static string GenerateResourceName(string outputFile)
+		{
+			string resourceName;
+
+			if (outputFile.EndsWith(FileExtension.DesignerCs, StringComparison.OrdinalIgnoreCase))
+			{
+				string outputFileName = Path.GetFileName(outputFile);
+				resourceName = outputFileName.Substring(0, outputFileName.Length - FileExtension.DesignerCs.Length);
+			}
+			else
+			{
+				resourceName = Path.GetFileNameWithoutExtension(outputFile);
+			}
+
+			return resourceName;
 		}
 
 		private static bool ResourceNameContainsCulture(string resourceName)

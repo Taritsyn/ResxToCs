@@ -15,7 +15,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>A .NET Core CLI tool that converts the `.resx` files to the `.Designer.cs` files.</Description>
 		<PackageTags>CLI;Designer.cs;DotNet;Generation;Resx</PackageTags>
-		<PackageReleaseNotes>An attempt was made to prevent simultaneous writing to the output file.</PackageReleaseNotes>
+		<PackageReleaseNotes>Added a command line switch to specify the output directory.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<Import Project="../../build/nuget-common.props" />

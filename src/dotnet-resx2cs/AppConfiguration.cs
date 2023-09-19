@@ -15,9 +15,18 @@
 		}
 
 		/// <summary>
-		/// Gets or sets a directory containing <code>.resx</code> files
+		/// Gets or sets a directory containing input <c>.resx</c> files
 		/// </summary>
 		public string InputDirectory
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets or sets a directory containing output <с>.Designer.cs</с> files
+		/// </summary>
+		public string OutputDirectory
 		{
 			get;
 			set;
@@ -49,6 +58,7 @@
 		{
 			Mode = AppMode.Unknown;
 			InputDirectory = string.Empty;
+			OutputDirectory = string.Empty;
 			Namespace = string.Empty;
 			InternalAccessModifier = false;
 		}

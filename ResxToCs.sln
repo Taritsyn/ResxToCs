@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{38642AA7-1113-4C84-B5EA-0C78157D75F3}"
 EndProject
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-resx2cs", "src\dotne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResxToCs.Core", "src\ResxToCs.Core\ResxToCs.Core.csproj", "{3A40E179-2619-4B1B-B598-ECB3C03DDA84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResxToCs.MSBuild", "src\ResxToCs.MSBuild\ResxToCs.MSBuild.csproj", "{B3516F65-253A-423B-875F-4DAA138FD2BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResxToCs.MSBuild", "src\ResxToCs.MSBuild\ResxToCs.MSBuild.csproj", "{B3516F65-253A-423B-875F-4DAA138FD2BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
